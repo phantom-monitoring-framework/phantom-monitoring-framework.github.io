@@ -1,263 +1,6 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "/configs",
-    "title": "1. Get a list of configurations of all platforms",
-    "version": "1.0.0",
-    "name": "GetConfigs",
-    "group": "Configs",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "platformID",
-            "description": "<p>Unique platform identifier</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "platformID.status",
-            "description": "<p>Status of the plugin (on/off)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "platformID.sampling_interval",
-            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "platformID.metrics",
-            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"node01.excess-cluster\":{\n         \"mf_plugin_Board_power\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"device0:current\":\"on\",\n             \"device0:vshunt\":\"on\",\n             \"device0:vbus\":\"on\",\n             \"device0:power\":\"on\"},\n         \"mf_plugin_CPU_perf\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"MIPS\":\"on\"},\n         \"mf_plugin_CPU_temperature\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"CPU0:core0\":\"off\"}\n     },\n     \"movidius\":{\n         \"power\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\"},\n         \"temperature\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\"}\n     }\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_mf/configs",
-        "type": "curl"
-      }
-    ],
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "ConfigsNotAvailable",
-            "description": "<p>No configurations found.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"No configurations found.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "v1/configs.js",
-    "groupTitle": "Configs"
-  },
-  {
-    "type": "get",
-    "url": "/configs/:platformID",
-    "title": "2. Get the configuration of a specific platform",
-    "version": "1.0.0",
-    "name": "GetConfigsByPlatformID",
-    "group": "Configs",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "platformID",
-            "description": "<p>Unique platform identifier</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_mf/configs/node01.excess-cluster",
-        "type": "curl"
-      }
-    ],
-    "success": {
-      "fields": {
-        "body": [
-          {
-            "group": "body",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Status of the plugin (on/off)</p>"
-          },
-          {
-            "group": "body",
-            "type": "String",
-            "optional": false,
-            "field": "sampling_interval",
-            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
-          },
-          {
-            "group": "body",
-            "type": "String",
-            "optional": false,
-            "field": "metrics",
-            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"mf_plugin_Board_power\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"device0:current\": \"on\",\n         \"device0:vshunt\": \"on\",\n         \"device0:vbus\": \"off\",\n         \"device0:power\": \"on\" }, \n     \"mf_plugin_CPU_perf\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"MIPS\": \"on\" }, \n     \"mf_plugin_CPU_temperature\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"CPU0:core0\": \"on\"}\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "PlatformNotAvailable",
-            "description": "<p>Given platformID does not exist.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Configuration for the platform'\" + platformID + \"' is not found.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "v1/configs.js",
-    "groupTitle": "Configs"
-  },
-  {
-    "type": "put",
-    "url": "/configs/:platformID",
-    "title": "3. Updata the configuration of a specific platform",
-    "version": "1.0.0",
-    "name": "PutConfigs",
-    "group": "Configs",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "platformID",
-            "description": "<p>Unique platform identifier</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Status of the plugin (on/off)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "sampling_interval",
-            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "metrics",
-            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n     \"mf_plugin_Board_power\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"device0:current\": \"on\",\n         \"device0:vshunt\": \"on\",\n         \"device0:vbus\": \"off\",\n         \"device0:power\": \"on\" }, \n     \"mf_plugin_CPU_perf\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"MIPS\": \"on\" }, \n     \"mf_plugin_CPU_temperature\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"CPU0:core0\": \"on\"}\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_mf/configs/node01.excess-cluster",
-        "type": "curl"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "href",
-            "description": "<p>Link to the stored configuration resource</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"href\": \"http://mf.excess-project.eu:3033/v1/phantom_mf/configs/node01.excess-cluster\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "StorageError",
-            "description": "<p>Given workflow could not be stored.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"error\": \"Could not change the configuration.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "v1/configs.js",
-    "groupTitle": "Configs"
-  },
-  {
-    "type": "get",
     "url": "/experiments",
     "title": "1. Get a list of all available experiments",
     "version": "1.0.0",
@@ -1119,6 +862,450 @@ define({ "api": [
     },
     "filename": "v1/profiles.js",
     "groupTitle": "Profiles"
+  },
+  {
+    "type": "get",
+    "url": "/configs",
+    "title": "1. Get a list of configurations of all platforms",
+    "version": "1.0.0",
+    "name": "GetConfigs",
+    "group": "RM_Configs",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "platformID",
+            "description": "<p>Unique platform identifier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "platformID.status",
+            "description": "<p>Status of the plugin (on/off)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "platformID.sampling_interval",
+            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "platformID.metrics",
+            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"node01.excess-cluster\":{\n         \"mf_plugin_Board_power\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"device0:current\":\"on\",\n             \"device0:vshunt\":\"on\",\n             \"device0:vbus\":\"on\",\n             \"device0:power\":\"on\"},\n         \"mf_plugin_CPU_perf\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"MIPS\":\"on\"},\n         \"mf_plugin_CPU_temperature\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\",\n             \"CPU0:core0\":\"off\"}\n     },\n     \"movidius\":{\n         \"power\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\"},\n         \"temperature\":{\n             \"status\":\"on\",\n             \"sampling_interval\":\"1000000000ns\"}\n     }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/configs",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ConfigsNotAvailable",
+            "description": "<p>No configurations found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"No configurations found.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/configs.js",
+    "groupTitle": "RM_Configs"
+  },
+  {
+    "type": "get",
+    "url": "/configs/:platformID",
+    "title": "2. Get the configuration of a specific platform",
+    "version": "1.0.0",
+    "name": "GetConfigsByPlatformID",
+    "group": "RM_Configs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "platformID",
+            "description": "<p>Unique platform identifier</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/configs/node01.excess-cluster",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "body": [
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Status of the plugin (on/off)</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "sampling_interval",
+            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "metrics",
+            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"mf_plugin_Board_power\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"device0:current\": \"on\",\n         \"device0:vshunt\": \"on\",\n         \"device0:vbus\": \"off\",\n         \"device0:power\": \"on\" }, \n     \"mf_plugin_CPU_perf\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"MIPS\": \"on\" }, \n     \"mf_plugin_CPU_temperature\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"CPU0:core0\": \"on\"}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PlatformNotAvailable",
+            "description": "<p>Given platformID does not exist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Configuration for the platform'\" + platformID + \"' is not found.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/configs.js",
+    "groupTitle": "RM_Configs"
+  },
+  {
+    "type": "put",
+    "url": "/configs/:platformID",
+    "title": "3. Add/Updata the configuration of a specific platform",
+    "version": "1.0.0",
+    "name": "PutConfigs",
+    "group": "RM_Configs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "platformID",
+            "description": "<p>Unique platform identifier</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Status of the plugin (on/off)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sampling_interval",
+            "description": "<p>Sampling interval of the plugin (in nanosecond)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "metrics",
+            "description": "<p>Name and status (on/off) of metrics of the plugin</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n     \"mf_plugin_Board_power\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"device0:current\": \"on\",\n         \"device0:vshunt\": \"on\",\n         \"device0:vbus\": \"off\",\n         \"device0:power\": \"on\" }, \n     \"mf_plugin_CPU_perf\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"MIPS\": \"on\" }, \n     \"mf_plugin_CPU_temperature\": {\n         \"status\": \"on\",\n         \"sampling_interval\": \"1000000000ns\",\n         \"CPU0:core0\": \"on\"}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/configs/node01.excess-cluster",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "href",
+            "description": "<p>Link to the stored configuration resource</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"href\": \"http://mf.excess-project.eu:3033/v1/phantom_rm/configs/node01.excess-cluster\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "StorageError",
+            "description": "<p>Given configuration could not be stored.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"error\": \"Could not change the configuration.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/configs.js",
+    "groupTitle": "RM_Configs"
+  },
+  {
+    "type": "get",
+    "url": "/resources",
+    "title": "1. Get a list of resources links and avaiable platforms",
+    "version": "1.0.0",
+    "name": "GetResources",
+    "group": "RM_Resources",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/resources",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"alexlaptop\": {\n      \"href\": \"http://mf.excess-project.eu:3033/v1/phantom_rm/resources/alexlaptop\"\n   },\n   \"movidius\": {\n      \"href\": \"http://mf.excess-project.eu:3033/v1/phantom_rm/resources/movidius\"\n   },\n   \"excesscluster\": {\n      \"href\": \"http://mf.excess-project.eu:3033/v1/phantom_rm/resources/excesscluster\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InternalSeverError",
+            "description": "<p>No results found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 500 Internal Sever Error\n{\n  \"error\": \"No resources found.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/resources.js",
+    "groupTitle": "RM_Resources"
+  },
+  {
+    "type": "get",
+    "url": "/resources/:platformID",
+    "title": "2. Get resource information for a given platform",
+    "version": "1.0.0",
+    "name": "GetResourcesByPlatformID",
+    "group": "RM_Resources",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "platformID",
+            "description": "<p>Unique platform identifier</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/resources/excesscluster",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"nodes\": [\n      {\n         \"id\": \"node01\",\n         \"cpus\": [\n            {\n               \"id\": \"cpu0\",\n               \"cores\": [\n                  {\n                     \"id\": \"core0\",\n                     \"pwMode\": 0,\n                     \"status\": \"allocated\",\n                     \"availTime\": \"2016-10-21T14:56:02.304\"\n                  },\n                  {\n                     \"id\": \"core1\",\n                     \"pwMode\": 0,\n                     \"status\": \"allocated\",\n                     \"availTime\": \"2016-10-21T15:21:07.567\"\n                  },\n                  ...\n               ]\n            }\n         ]\n      }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PlatformNotAvailable",
+            "description": "<p>Given platformID does not exist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Configuration for the platform is not found.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/resources.js",
+    "groupTitle": "RM_Resources"
+  },
+  {
+    "type": "put",
+    "url": "/resources/:platformID",
+    "title": "3. Add/Update resource information for a given platform",
+    "version": "1.0.0",
+    "name": "PutResources",
+    "group": "RM_Resources",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "platformID",
+            "description": "<p>Unique platform identifier</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>Unique identifier of the resource</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "pwMode",
+            "description": "<p>Power mode of the resource</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>Status of the resource (allocated/free)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "availTime",
+            "description": "<p>Until when the resource will be free</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n   \"nodes\": [\n      {\n         \"id\": \"node01\",\n         \"cpus\": [\n            {\n               \"id\": \"cpu0\",\n               \"cores\": [\n                  {\n                     \"id\": \"core0\",\n                     \"pwMode\": 0,\n                     \"status\": \"allocated\",\n                     \"availTime\": \"2016-10-21T14:56:02.304\"\n                  },\n                  {\n                     \"id\": \"core1\",\n                     \"pwMode\": 0,\n                     \"status\": \"allocated\",\n                     \"availTime\": \"2016-10-21T15:21:07.567\"\n                  },\n                  ...\n               ]\n            }\n         ]\n      }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://mf.excess-project.eu:3033/v1/phantom_rm/resources/excesscluster",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "StorageError",
+            "description": "<p>Given resources could not be stored.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"error\": \"Could not change the resources.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "v1/resources.js",
+    "groupTitle": "RM_Resources"
   },
   {
     "type": "get",

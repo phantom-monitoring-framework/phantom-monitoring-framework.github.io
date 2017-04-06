@@ -8,13 +8,14 @@ define({
     "title": "PHANTOM Monitoring API"
   },
   "order": [
-    "Configs",
     "Workflows",
     "Experiments",
     "Runtime",
     "Profiles",
     "Metrics",
-    "Statistics"
+    "Statistics",
+    "RM_Resources",
+    "RM_Configs"
   ],
   "template": {
     "withCompare": true,
@@ -25,7 +26,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2017-03-29T09:24:43.735Z",
+    "time": "2017-04-06T15:13:06.130Z",
     "url": "http://apidocjs.com",
     "version": "0.17.5"
   }
